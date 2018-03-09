@@ -6,11 +6,12 @@
 <section id="chat" style="display: none">
 	<table id="list_user"></table>
   <p id="chambre"></p>
-	<table id="message">
+  <a href="/chat"><button>Deconnection</button></a>
+	<table id="message" style='float:left; text-align: left;background-color:#f2f2f2;'>
     
   </table>
-	<section id="msg_a_transmettre">
-		<input type="text" name="textMessage"><button onclick="envoieMessage()">Envoyer</button>		
+	<section>
+		<input id="msg_a_transmettre" type="text" name="textMessage"><button onclick="envoieMessage()">Envoyer</button>		
 	</section>
 </section>
 <script type="text/javascript">
@@ -48,8 +49,12 @@ Pour établir une communication socket il faut un premier appel de
  })
 
   socket.on('connectAlaChambre',function(data){
-    document.getElementById('chambre').innerHTML = data.
+    document.getElementById('chambre').innerHTML = data;
 });
+socket.on('nouveau_msg', function(data) {
+	console.log(data)
+    document.getElementById('message').innerHTML += '<div style="margin-top:2%"><b style="color:blue;">' + data[id] + '</b>:<br> ' + data.msg + '</div>'
+    })
 
  });
  }
@@ -61,4 +66,13 @@ Pour établir une communication socket il faut un premier appel de
  */
  socket.emit('setUser', {user : elmUser.value})
  }
+
+ function envoieMessage() {
+         let msg = document.getElementById('msg_a_transmettre').value;
+         let user = document.querySelector('#enregistrement input').value;
+         console.log(user)
+         if(msg) {
+            socket.emit('msg', {message: msg, user: user});
+         }
+      }
 </script>
