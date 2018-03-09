@@ -58,16 +58,6 @@ console.log(req.body)
 })
 app.get('/chat', (req, res) => {
 
-  io.on('connection', function(socket){
-    console.log(socket.id)
-    socket.on('setUser', function(data){
-      console.log('setUser')
-      console.log(data.user)
-      socket.emit('ackUser', data)
-    })
-  }); // une connexion socket
-  let message = "Chat"
-
   let noChambre = 1;
 io.on('connection', function(socket){
   //Incrémenté noChambre si plus de un clients dans la chambre.
@@ -76,9 +66,9 @@ io.on('connection', function(socket){
   socket.join("chambre-"+noChambre);
 
   // déclenche cet événement pour tous les clients de la chambre.
-  io.sockets.in("chambre-" + noChambre).emit('connectAlaChambre', "Vous êtes dans la chambre numéro: " + noChambre);
+  io.sockets.in("chambre-" + noChambre).emit('connectAlaChambre', "Vous êtes dans la chambre numéro " + noChambre);
 })
-  res.render('socket_vue.ejs', {message : message})
+  res.render('socket_vue.ejs')
 });
 
 app.post('/accueil',  (req, res) => {
